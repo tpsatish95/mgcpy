@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
-from mgcpy.independence_tests.mgc.mgc import MGC
+
+from mgcpy.independence_tests.mgc import MGC
 
 
 def test_mgc_test_linear():
@@ -10,7 +11,7 @@ def test_mgc_test_linear():
     Y = np.array([0.665986696,  0.402397835,  0.134445492, -0.796653997, -0.636592886,  0.277283128, -0.636847542,  0.249515282, -0.149871134, -0.147567403,  0.369251601,  0.687118553,  0.524448340, -0.585999355, -0.858549573, -0.756081985,  0.129307735,  0.180976113,  0.874637167,  0.458794276, -0.003339139, -0.967879037,  0.758180626, -0.392856219, -0.114772505,
                   0.425345845, -0.069794980, -0.330857932,  0.229331072,  0.058739766,  0.777801029,  0.580715974, -0.231521102, -0.233366160,  0.669360658,  0.999785556,  0.648315305, -0.321119155,  0.156810807,  0.451349979, -0.393285002,  0.720164611,  0.811149183,  0.936183880, -0.587798720, -0.721394055,  0.233671350,  0.625407903, -0.154576153, -0.451475001]).reshape(-1, 1)
 
-    p_value = 0
+    p_value = 1/1000
 
     mgc = MGC()
     p_value_res, _ = mgc.p_value(X, Y)
@@ -31,7 +32,7 @@ def test_mgc_test_non_linear():
     assert np.allclose(p_value, p_value_res, rtol=0.1)
 
 
-def load_results(file_name, results_dir="./mgcpy/independence_tests/unit_tests/mgc/data/"):
+def load_results(file_name, results_dir="./mgcpy/independence_tests/unit_tests/mgc/data/mgc/"):
     mgc_results = np.genfromtxt(results_dir + file_name, delimiter=',')[1:]
 
     pMGC = mgc_results[:, 0][0]
@@ -54,11 +55,11 @@ def test_mgc_test_all():
     for simulation in simulations:
         print(simulation)
 
-        X = np.genfromtxt(data_dir + simulation + "_x.csv", delimiter=',').reshape(-1, 1)
-        Y = np.genfromtxt(data_dir + simulation + "_y.csv", delimiter=',').reshape(-1, 1)
+        X = np.genfromtxt(data_dir + "input/" + simulation + "_x.csv", delimiter=',').reshape(-1, 1)
+        Y = np.genfromtxt(data_dir + "input/" + simulation + "_y.csv", delimiter=',').reshape(-1, 1)
 
         if simulation == "step_sim":
-            mgc_results = np.genfromtxt(data_dir + simulation + "_res.csv", delimiter=',')[1:]
+            mgc_results = np.genfromtxt(data_dir + "mgc/" + simulation + "_res.csv", delimiter=',')[1:]
             pMGC = mgc_results[:, 0][0]
             statMGC = mgc_results[:, 1][0]
             # pLocalCorr = mgc_results[:, 2:4]
